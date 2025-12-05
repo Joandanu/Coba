@@ -64,16 +64,32 @@ if st.button("Prediksi"):
     else:
         st.success(f"✔ Pelanggan TIDAK Churn (Probabilitas: {prob:.2f})")
 
-# ==== DEBUG: CEK INPUT ====
-st.write("=== INPUT RAW ===")
+# ========== DEBUG TANPA GAMBAR ==========
+
+st.subheader("Debug Info")
+
+# 1. Tampilkan input user
+st.write("Input user:")
 st.write(data)
 
+# 2. Ambil preprocessor dari pipeline
 pre = model.named_steps["preprocessor"]
 
-st.write("=== INPUT AFTER TRANSFORM ===")
+# 3. Tampilkan NAMA KATEGORI hasil OneHotEncoder
+ohe = pre.named_transformers_["cat"]
+st.write("Kategori OneHotEncoder:")
+st.write(ohe.categories_)
+
+# 4. Transformasi data
 transformed = pre.transform(data)
 try:
     transformed = transformed.toarray()
 except:
     pass
-st.write(transformed)
+
+# 5. Tampilkan 20 nilai pertama biar tidak meledak
+st.write("20 nilai pertama hasil transformasi:")
+st.write(transformed[0][:20])
+
+# 6. Tampilkan jumlah fitur setelah transform
+st.write(f"Jumlah fitur setelah transform: {transformed.shape[1]}")
