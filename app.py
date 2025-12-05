@@ -63,3 +63,7 @@ if st.button("Prediksi"):
         st.error(f"⚠ Pelanggan berpotensi CHURN (Probabilitas: {prob:.2f})")
     else:
         st.success(f"✔ Pelanggan TIDAK Churn (Probabilitas: {prob:.2f})")
+
+st.write(df_input)
+st.write(model.named_steps["preprocessor"].transform(df_input))
+
