@@ -1,16 +1,14 @@
-
 import streamlit as st
-import joblib
-import numpy as np
 import pandas as pd
+import joblib
 
-# Load pipeline
+# Load model
 model = joblib.load("model.joblib")
 
 st.title("Customer Churn Prediction App")
 st.write("Masukkan data pelanggan untuk memprediksi Churn")
 
-# === Input fitur dari user ===
+# ===== INPUT =====
 
 tenure = st.number_input("Tenure", min_value=0, max_value=100)
 MonthlyCharges = st.number_input("Monthly Charges")
@@ -31,40 +29,61 @@ StreamingTV = st.selectbox("Streaming TV", ["Yes", "No", "No internet service"])
 StreamingMovies = st.selectbox("Streaming Movies", ["Yes", "No", "No internet service"])
 Contract = st.selectbox("Contract", ["Month-to-month", "One year", "Two year"])
 PaperlessBilling = st.selectbox("Paperless Billing", ["Yes", "No"])
-PaymentMethod = st.selectbox("Payment Method", [
-    "Electronic check", "Mailed check", "Bank transfer (automatic)",
-    "Credit card (automatic)"
-])
+PaymentMethod = st.selectbox("Payment Method",
+    ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"]
+)
 
-# Buat dataframe dari input
-data = pd.DataFrame({
-    'tenure': [tenure],
-    'MonthlyCharges': [MonthlyCharges],
-    'TotalCharges': [TotalCharges],
-    'gender': [gender],
-    'SeniorCitizen': [SeniorCitizen],
-    'Partner': [Partner],
-    'Dependents': [Dependents],
-    'PhoneService': [PhoneService],
-    'MultipleLines': [MultipleLines],
-    'InternetService': [InternetService],
-    'OnlineSecurity': [OnlineSecurity],
-    'OnlineBackup': [OnlineBackup],
-    'DeviceProtection': [DeviceProtection],
-    'TechSupport': [TechSupport],
-    'StreamingTV': [StreamingTV],
-    'StreamingMovies': [StreamingMovies],
-    'Contract': [Contract],
-    'PaperlessBilling': [PaperlessBilling],
-    'PaymentMethod': [PaymentMethod]
-})
+# ==========================================
+#   ⚠ DI SINI MAPPING DITARUH (PERBAIKAN 2)
+# ==========================================
 
-# Prediksi
+yn_map = {"Yes": 1, "No": 0}
+
+Partner = yn_map[Partner]
+Dependents = yn_map[Dependents]
+PhoneService = yn_map[PhoneService]
+MultipleLines = MultipleLines  # tetap string → nanti di encoder one-hot
+PaperlessBilling = yn_map[PaperlessBilling]
+
+OnlineSecurity = OnlineSecurity
+OnlineBackup = OnlineBackup
+DeviceProtection = DeviceProtection
+TechSupport = TechSupport
+StreamingTV = StreamingTV
+StreamingMovies = StreamingMovies
+
+gender = 1 if gender == "Male" else 0   # sama seperti dataset CSV kamu
+
+
+# ===== DATAFRAME HARUS SESUAI URUTAN FITUR TRAINING =====
+data = pd.DataFrame([{
+    "tenure": tenure,
+    "MonthlyCharges": MonthlyCharges,
+    "TotalCharges": TotalCharges,
+    "gender": gender,
+    "SeniorCitizen": SeniorCitizen,
+    "Partner": Partner,
+    "Dependents": Dependents,
+    "PhoneService": PhoneService,
+    "MultipleLines": MultipleLines,
+    "InternetService": InternetService,
+    "OnlineSecurity": OnlineSecurity,
+    "OnlineBackup": OnlineBackup,
+    "DeviceProtection": DeviceProtection,
+    "TechSupport": TechSupport,
+    "StreamingTV": StreamingTV,
+    "StreamingMovies": StreamingMovies,
+    "Contract": Contract,
+    "PaperlessBilling": PaperlessBilling,
+    "PaymentMethod": PaymentMethod
+}])
+
+# ===== PREDIKSI =====
 if st.button("Prediksi"):
     pred = model.predict(data)[0]
     prob = model.predict_proba(data)[0][1]
 
     if pred == 1:
-        st.error(f"⚠ Pelanggan berpotensi CHURN (probabilitas: {prob:.2f})")
+        st.error(f"⚠ Pelanggan berpotensi CHURN (Probabilitas: {prob:.2f})")
     else:
-        st.success(f"✔ Pelanggan TIDAK Churn (probabilitas: {prob:.2f})")
+        st.success(f"✔ Pelanggan TIDAK Churn (Probabilitas: {prob:.2f})")
