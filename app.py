@@ -64,10 +64,16 @@ if st.button("Prediksi"):
     else:
         st.success(f"✔ Pelanggan TIDAK Churn (Probabilitas: {prob:.2f})")
 
-pre = model.named_steps["preprocessor"]
-st.write("=== RAW INPUT ===")
+# ==== DEBUG: CEK INPUT ====
+st.write("=== INPUT RAW ===")
 st.write(data)
 
-st.write("=== TRANSFORMED INPUT (OHE + SCALER) ===")
-st.write(pre.transform(data).toarray())
+pre = model.named_steps["preprocessor"]
 
+st.write("=== INPUT AFTER TRANSFORM ===")
+transformed = pre.transform(data)
+try:
+    transformed = transformed.toarray()
+except:
+    pass
+st.write(transformed)
