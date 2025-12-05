@@ -61,8 +61,8 @@ data = pd.DataFrame({
 
 # Prediksi
 if st.button("Prediksi"):
-    pred = .predict(data)[0]
-    prob = .predict_proba(data)[0][1]
+    pred = model.predict(data)[0]
+    prob = model.predict_proba(data)[0][1]
 
     if pred == 1:
         st.error(f"⚠ Pelanggan berpotensi CHURN (probabilitas: {prob:.2f})")
