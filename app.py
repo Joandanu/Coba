@@ -64,6 +64,10 @@ if st.button("Prediksi"):
     else:
         st.success(f"✔ Pelanggan TIDAK Churn (Probabilitas: {prob:.2f})")
 
-st.write(df_input)
-st.write(model.named_steps["preprocessor"].transform(df_input))
+pre = model.named_steps["preprocessor"]
+st.write("=== RAW INPUT ===")
+st.write(data)
+
+st.write("=== TRANSFORMED INPUT (OHE + SCALER) ===")
+st.write(pre.transform(data).toarray())
 
