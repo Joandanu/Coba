@@ -59,7 +59,7 @@ if st.button("Prediksi"):
     pred = model.predict(data)[0]
     prob = model.predict_proba(data)[0][1]
 
-    if pred == "Yes":
+    if pred == 1:
         st.error(f"⚠ Pelanggan berpotensi CHURN (Probabilitas: {prob:.2f})")
     else:
         st.success(f"✔ Pelanggan TIDAK Churn (Probabilitas: {prob:.2f})")
