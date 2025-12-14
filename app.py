@@ -147,7 +147,7 @@ with tab1:
     st.write(f"**Recall  :** {recall:.4f}")
     st.write(f"**F1 Score:** {f1:.4f}")
 
-    st.markdown("Classification Report")
+    st.subheader("Classification Report")
     
     report_dict = classification_report(
         y_test,
