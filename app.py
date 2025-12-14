@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import joblib
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, auc
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score, precision_score, recall_score, f1_score, classification_report
 
 st.set_page_config(page_title="Customer Churn Prediction", layout="wide")
 
@@ -146,19 +146,35 @@ with tab1:
 
 # ---------- TAB 2: ROC CURVE ----------
 with tab2:
-    y_score = model.predict_proba(X_test)[:, 1]
+    st.divider()
+st.subheader("📈 Evaluasi Model (Data Test)")
 
-    fpr, tpr, _ = roc_curve(y_test, y_score)
-    roc_auc = auc(fpr, tpr)
+y_pred_test = model.predict(X_test)
 
-    fig, ax = plt.subplots()
-    ax.plot(fpr, tpr, label=f"AUC = {roc_auc:.2f}")
-    ax.plot([0, 1], [0, 1], linestyle="--")
-    ax.set_xlabel("False Positive Rate")
-    ax.set_ylabel("True Positive Rate")
-    ax.legend()
+accuracy = accuracy_score(y_test, y_pred_test)
+precision = precision_score(y_test, y_pred_test)
+recall = recall_score(y_test, y_pred_test)
+f1 = f1_score(y_test, y_pred_test)
 
-    st.pyplot(fig)
+st.markdown("### ===== Evaluasi Model: Logistic Regression =====")
+st.write(f"**Akurasi :** {accuracy:.4f}")
+st.write(f"**Presisi :** {precision:.4f}")
+st.write(f"**Recall  :** {recall:.4f}")
+st.write(f"**F1 Score:** {f1:.4f}")
+
+# ======================================================
+# CLASSIFICATION REPORT
+# ======================================================
+st.markdown("### Classification Report")
+
+report_dict = classification_report(
+    y_test,
+    y_pred_test,
+    output_dict=True
+)
+
+report_df = pd.DataFrame(report_dict).transpose()
+st.dataframe(report_df.style.format("{:.2f}"))
 # ---------- TAB 3: KOEFISIEN ----------
 with tab3:
     coef_df = pd.DataFrame({
