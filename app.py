@@ -3,7 +3,13 @@ import pandas as pd
 import joblib
 
 # Load model
-model = joblib.load("model.joblib")
+bundle = joblib.load("logistic.joblib")
+
+model = bundle["model"]
+scaler = bundle["scaler"]
+encoder = bundle["encoder"]
+num_cols = bundle["num_cols"]
+cat_cols = bundle["cat_cols"]
 
 st.title("Customer Churn Prediction App")
 st.write("Masukkan data pelanggan untuk memprediksi Churn")
@@ -59,6 +65,24 @@ data = pd.DataFrame([{
     "PaymentMethod": PaymentMethod
 }])
 
+# PREPROCESSING (HARUS SAMA DENGAN TRAINING)
+# ======================================================
+# 1. One-Hot Encoding
+encoded_cat = pd.DataFrame(
+    encoder.transform(data[cat_cols]),
+    columns=encoder.get_feature_names_out(cat_cols)
+)
+
+# 2. Gabungkan numerik + encoding
+X = pd.concat(
+    [data[num_cols].reset_index(drop=True), encoded_cat],
+    axis=1
+)
+
+# 3. Scaling numerik
+X[num_cols] = scaler.transform(X[num_cols])
+
+
 # ===== PREDIKSI =====
 if st.button("Prediksi"):
     pred = model.predict(data)[0]
@@ -71,30 +95,10 @@ if st.button("Prediksi"):
 
 # ========== DEBUG TANPA GAMBAR ==========
 
-st.subheader("Debug Info")
+with st.expander("🧪 Debug Info"):
+    st.write("Input user:")
+    st.dataframe(data)
 
-# 1. Tampilkan input user
-st.write("Input user:")
-st.write(data)
-
-# 2. Ambil preprocessor dari pipeline
-pre = model.named_steps["preprocessor"]
-
-# 3. Tampilkan NAMA KATEGORI hasil OneHotEncoder
-ohe = pre.named_transformers_["cat"]
-st.write("Kategori OneHotEncoder:")
-st.write(ohe.categories_)
-
-# 4. Transformasi data
-transformed = pre.transform(data)
-try:
-    transformed = transformed.toarray()
-except:
-    pass
-
-# 5. Tampilkan 20 nilai pertama biar tidak meledak
-st.write("20 nilai pertama hasil transformasi:")
-st.write(transformed[0][:20])
-
-# 6. Tampilkan jumlah fitur setelah transform
-st.write(f"Jumlah fitur setelah transform: {transformed.shape[1]}")
+    st.write("Jumlah fitur setelah preprocessing:", X.shape[1])
+    st.write("20 fitur pertama:")
+    st.write(X.iloc[0, :20])
