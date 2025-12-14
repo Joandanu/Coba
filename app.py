@@ -24,13 +24,12 @@ y_test = bundle["y_test"]
 # ======================================================
 # HEADER
 # ======================================================
-st.title("📊 Customer Churn Prediction App")
-st.write("Aplikasi prediksi churn pelanggan menggunakan **Logistic Regression**")
+st.title("PREDIKSI TELCO CUSTOMER CHURN")
 
 # ======================================================
 # INPUT USER
 # ======================================================
-st.subheader("🧾 Input Data Pelanggan")
+st.subheader("Input Data Pelanggan")
 
 col1, col2, col3 = st.columns(3)
 
@@ -110,7 +109,7 @@ X = X[feature_names]
 # ======================================================
 # PREDIKSI
 # ======================================================
-if st.button("🔮 Prediksi Churn"):
+if st.button("PREDIKSI"):
     pred = model.predict(X)[0]
     prob = model.predict_proba(X)[0][1]
 
