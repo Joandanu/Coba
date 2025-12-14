@@ -114,15 +114,15 @@ if st.button("PREDIKSI"):
     prob = model.predict_proba(X)[0][1]
 
     if pred == 1:
-        st.error(f"⚠️ Pelanggan berpotensi **CHURN** (Probabilitas: {prob:.2%})")
+        st.error(f"Pelanggan berpotensi **CHURN** (Probabilitas: {prob:.2%})")
     else:
-        st.success(f"✅ Pelanggan **TIDAK CHURN** (Probabilitas: {prob:.2%})")
+        st.success(f"Pelanggan **TIDAK CHURN** (Probabilitas: {prob:.2%})")
 
 # ======================================================
 # ANALISIS MODEL
 # ======================================================
 st.divider()
-st.subheader("📈 Analisis Model")
+st.subheader("Analisis Model")
 
 tab1, tab2, tab3 = st.tabs([
     "Evaluasi Model",
@@ -133,7 +133,7 @@ tab1, tab2, tab3 = st.tabs([
 # ---------- TAB 1: Evaluasi Model ----------
 with tab1:
     st.divider()
-    st.subheader("📈 Evaluasi Model (Data Test)")
+    st.subheader("Evaluasi Model (Data Test)")
 
     y_pred_test = model.predict(X_test)
 
@@ -179,8 +179,8 @@ with tab3:
         "Coefficient": model.coef_[0]
     }).sort_values(by="Coefficient", ascending=False)
 
-    st.write("🔼 Fitur yang meningkatkan peluang **CHURN**:")
+    st.write("Fitur yang meningkatkan peluang **CHURN**:")
     st.dataframe(coef_df.head(10))
 
-    st.write("🔽 Fitur yang menurunkan peluang **CHURN**:")
+    st.write("Fitur yang menurunkan peluang **CHURN**:")
     st.dataframe(coef_df.tail(10))
