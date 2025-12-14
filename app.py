@@ -8,7 +8,7 @@ bundle = joblib.load("logistic.joblib")
 model = bundle["model"]
 scaler = bundle["scaler"]
 encoder = bundle["encoder"]
-num_cols = bundle["num_cols"]
+num_cols = ['tenure', 'MonthlyCharges', 'TotalCharges']
 cat_cols = bundle["cat_cols"]
 
 st.title("Customer Churn Prediction App")
