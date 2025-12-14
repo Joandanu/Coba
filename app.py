@@ -126,13 +126,42 @@ st.divider()
 st.subheader("📈 Analisis Model")
 
 tab1, tab2, tab3 = st.tabs([
+    "Evaluasi Model",
     "Confusion Matrix",
-    "ROC Curve",
     "Koefisien Logistic Regression"
 ])
 
-# ---------- TAB 1: CONFUSION MATRIX ----------
+# ---------- TAB 1: Evaluasi Model ----------
 with tab1:
+    st.divider()
+    st.subheader("📈 Evaluasi Model (Data Test)")
+
+    y_pred_test = model.predict(X_test)
+
+    accuracy = accuracy_score(y_test, y_pred_test)
+    precision = precision_score(y_test, y_pred_test)
+    recall = recall_score(y_test, y_pred_test)
+    f1 = f1_score(y_test, y_pred_test)
+
+    st.markdown("### ===== Evaluasi Model: Logistic Regression =====")
+    st.write(f"**Akurasi :** {accuracy:.4f}")
+    st.write(f"**Presisi :** {precision:.4f}")
+    st.write(f"**Recall  :** {recall:.4f}")
+    st.write(f"**F1 Score:** {f1:.4f}")
+
+    st.markdown("### Classification Report")
+    
+    report_dict = classification_report(
+        y_test,
+        y_pred_test,
+        output_dict=True
+    )
+    
+    report_df = pd.DataFrame(report_dict).transpose()
+    st.dataframe(report_df.style.format("{:.2f}"))
+
+# ---------- TAB 2: CONFUSION MATRIX ----------
+with tab2:
     y_pred_test = model.predict(X_test)
 
     cm = confusion_matrix(y_test, y_pred_test)
@@ -143,38 +172,7 @@ with tab1:
         display_labels=["Tidak Churn", "Churn"]).plot(ax=ax)
 
     st.pyplot(fig)
-
-# ---------- TAB 2: ROC CURVE ----------
-with tab2:
-    st.divider()
-st.subheader("📈 Evaluasi Model (Data Test)")
-
-y_pred_test = model.predict(X_test)
-
-accuracy = accuracy_score(y_test, y_pred_test)
-precision = precision_score(y_test, y_pred_test)
-recall = recall_score(y_test, y_pred_test)
-f1 = f1_score(y_test, y_pred_test)
-
-st.markdown("### ===== Evaluasi Model: Logistic Regression =====")
-st.write(f"**Akurasi :** {accuracy:.4f}")
-st.write(f"**Presisi :** {precision:.4f}")
-st.write(f"**Recall  :** {recall:.4f}")
-st.write(f"**F1 Score:** {f1:.4f}")
-
-# ======================================================
-# CLASSIFICATION REPORT
-# ======================================================
-st.markdown("### Classification Report")
-
-report_dict = classification_report(
-    y_test,
-    y_pred_test,
-    output_dict=True
-)
-
-report_df = pd.DataFrame(report_dict).transpose()
-st.dataframe(report_df.style.format("{:.2f}"))
+    
 # ---------- TAB 3: KOEFISIEN ----------
 with tab3:
     coef_df = pd.DataFrame({
