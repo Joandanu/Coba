@@ -133,7 +133,7 @@ tab1, tab2, tab3 = st.tabs([
 # ---------- TAB 1: Evaluasi Model ----------
 with tab1:
     st.divider()
-    st.subheader("Evaluasi Model (Data Test)")
+    st.subheader("Evaluasi Model")
 
     y_pred_test = model.predict(X_test)
 
@@ -142,13 +142,12 @@ with tab1:
     recall = recall_score(y_test, y_pred_test)
     f1 = f1_score(y_test, y_pred_test)
 
-    st.markdown("### ===== Evaluasi Model: Logistic Regression =====")
     st.write(f"**Akurasi :** {accuracy:.4f}")
     st.write(f"**Presisi :** {precision:.4f}")
     st.write(f"**Recall  :** {recall:.4f}")
     st.write(f"**F1 Score:** {f1:.4f}")
 
-    st.markdown("### Classification Report")
+    st.markdown("Classification Report")
     
     report_dict = classification_report(
         y_test,
