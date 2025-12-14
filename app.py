@@ -14,6 +14,8 @@ cat_cols = bundle["cat_cols"]
 st.title("Customer Churn Prediction App")
 st.write("Masukkan data pelanggan untuk memprediksi Churn")
 
+st.write("Scaler expects:", scaler.feature_names_in_)
+st.write("X[num_cols].columns:", X[num_cols].columns.tolist())
 # ===== INPUT =====
 tenure = st.number_input("Tenure", min_value=0, max_value=100)
 MonthlyCharges = st.number_input("Monthly Charges")
