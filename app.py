@@ -18,6 +18,8 @@ encoder = bundle["encoder"]
 num_cols = bundle["num_cols"]
 cat_cols = bundle["cat_cols"]
 feature_names = bundle["feature_names"]
+X_test = bundle["X_test"]
+y_test = bundle["y_test"]
 
 # ======================================================
 # HEADER
@@ -131,18 +133,22 @@ tab1, tab2, tab3 = st.tabs([
 
 # ---------- TAB 1: CONFUSION MATRIX ----------
 with tab1:
-    y_true = model.classes_
-    y_pred = model.predict(X)
+    y_pred_test = model.predict(X_test)
 
-    cm = confusion_matrix([pred], [pred])
+    cm = confusion_matrix(y_test, y_pred_test)
+
     fig, ax = plt.subplots()
-    ConfusionMatrixDisplay(cm, display_labels=["Tidak Churn", "Churn"]).plot(ax=ax)
+    ConfusionMatrixDisplay(
+        cm,
+        display_labels=["Tidak Churn", "Churn"]).plot(ax=ax)
+
     st.pyplot(fig)
 
 # ---------- TAB 2: ROC CURVE ----------
 with tab2:
-    y_score = model.predict_proba(X)[:, 1]
-    fpr, tpr, _ = roc_curve([pred], y_score)
+    y_score = model.predict_proba(X_test)[:, 1]
+
+    fpr, tpr, _ = roc_curve(y_test, y_score)
     roc_auc = auc(fpr, tpr)
 
     fig, ax = plt.subplots()
@@ -150,10 +156,9 @@ with tab2:
     ax.plot([0, 1], [0, 1], linestyle="--")
     ax.set_xlabel("False Positive Rate")
     ax.set_ylabel("True Positive Rate")
-    ax.set_title("ROC Curve")
     ax.legend()
-    st.pyplot(fig)
 
+    st.pyplot(fig)
 # ---------- TAB 3: KOEFISIEN ----------
 with tab3:
     coef_df = pd.DataFrame({
