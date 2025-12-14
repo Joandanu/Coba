@@ -96,7 +96,7 @@ data = pd.DataFrame([{
 # ======================================================
 encoded_cat = pd.DataFrame(
     encoder.transform(data[cat_cols]),
-    columns=encoder.get_feature_names_out(cat_cols attaching
+    columns=encoder.get_feature_names_out(cat_cols)
 )
 
 X = pd.concat([data[num_cols], encoded_cat], axis=1)
