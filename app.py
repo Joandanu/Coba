@@ -85,11 +85,12 @@ X[num_cols] = scaler.transform(X[num_cols])
 st.write("num_cols dari bundle:")
 st.write(num_cols)
 
+X = X[model.feature_names_in_]
 
 # ===== PREDIKSI =====
 if st.button("Prediksi"):
-    pred = model.predict(data)[0]
-    prob = model.predict_proba(data)[0][1]
+    pred = model.predict(X)[0]
+    prob = model.predict_proba(X)[0][1]
 
     if pred == 1:
         st.error(f"⚠ Pelanggan berpotensi CHURN (Probabilitas: {prob:.2f})")
