@@ -82,6 +82,12 @@ X = pd.concat(
 # 3. Scaling numerik
 X[num_cols] = scaler.transform(X[num_cols])
 
+st.write("num_cols dari bundle:")
+st.write(num_cols)
+
+st.write("kolom data:")
+st.write(data.columns.tolist())
+
 
 # ===== PREDIKSI =====
 if st.button("Prediksi"):
