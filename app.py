@@ -132,7 +132,6 @@ tab1, tab2, tab3 = st.tabs([
 
 # ---------- TAB 1: Evaluasi Model ----------
 with tab1:
-    st.divider()
     st.subheader("Evaluasi Model")
 
     y_pred_test = model.predict(X_test)
